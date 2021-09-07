@@ -144,6 +144,19 @@
         map.setLayoutProperty(event.target.value, "visibility", "visible")
       });
 
+      // Add layer to display highlighted tract
+      const highlightLayer = 'highlight-layer';
+      map.addLayer({
+        id: highlightLayer,
+        type: 'fill',
+        source: "composite",
+        "source-layer": "2020to2010CensusTracts-1ac5kz",
+        paint: {
+          'fill-color': 'hotpink',
+          'fill-opacity': 0.75,
+        },
+        filter: ['==','TRACTCE10',''],
+      });
 
       // wait for map to load before adjusting it
       map.on('load', function() {
@@ -283,6 +296,7 @@
               tracts[0]['properties'][lookupracenet[selectedLayer]] +
               '</p><p>Percentage Increase/Decrease: ' +
               tracts[0]['properties'][lookupracenetper[selectedLayer]];
+            map.setFilter(highlightLayer, ['==', 'TRACTCE10', tracts[0].properties.TRACTCE10]);
           }
         });
       });
